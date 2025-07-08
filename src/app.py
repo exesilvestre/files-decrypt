@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 import uvicorn
+from endpoints.upload import router as upload_router
 
 app = FastAPI()
+app.include_router(upload_router)
 
 
 @app.get("/")
