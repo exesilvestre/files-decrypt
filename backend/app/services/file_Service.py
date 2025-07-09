@@ -1,6 +1,9 @@
 import hashlib
 import base64
-import xml.etree.ElementTree as ET
+from db.mongo_client import collection
+from utils.detect_category import get_category
+from utils.unsecure_files import is_forbidden_file
+
 
 class FileService:
     def __init__(self, file):
@@ -8,24 +11,6 @@ class FileService:
 
     def sha1_bytes(self, data: bytes) -> str:
         return hashlib.sha1(data).hexdigest().upper()
-
-    def get_category(self, doctype: str) -> str:
-        if not doctype:
-            return "Unknown"
-        doctype = doctype.upper()
-        if "APPRAISERSIGNATURE" in doctype:
-            return "Appraiser Signature"
-        if "FORM/1004" in doctype:
-            return "Residential Form"
-        if "FORM/REO" in doctype:
-            return "REO Form"
-        if "FORM/MISMO" in doctype:
-            return "MISMO Form"
-        if doctype.startswith("IMAGE"):
-            return "Image"
-        if doctype.startswith("FORM"):
-            return "Generic Form"
-        return "Other"
 
     def _extract_metadata(self, header: bytes) -> dict:
         try:
@@ -40,7 +25,13 @@ class FileService:
                 metadata[key] = val.strip()
         return metadata
 
-    def _find_content_end(self, raw: bytes, start: int, end: int, expected_sha1: str) -> tuple[bytes, int] | tuple[None, None]:
+    def _find_content_end(
+        self,
+        raw: bytes,
+        start: int,
+        end: int,
+        expected_sha1: str
+    ) -> tuple[bytes, int] | tuple[None, None]:
         last_marker = raw.rfind(b"**", start, end)
         if last_marker == -1:
             last_marker = end
@@ -57,17 +48,13 @@ class FileService:
         except Exception:
             return False
 
-    def _resumen_xml(self, content_bytes: bytes) -> dict:
-        """Extrae resumen simple: etiqueta raíz y etiquetas hijas (puedes usar para mostrar)."""
+    def is_text(self, data: bytes) -> bool:
+        """Detecta si bytes representan texto UTF-8 válido."""
         try:
-            text = content_bytes.decode("utf-8", errors="ignore").strip()
-            root = ET.fromstring(text)
-            children_tags = [child.tag for child in root]
-            return {"root_tag": root.tag, "children_tags": children_tags}
-        except ET.ParseError:
-            return {"error": "No se pudo parsear el XML"}
-        except Exception as e:
-            return {"error": f"Error inesperado: {str(e)}"}
+            data.decode("utf-8")
+            return True
+        except UnicodeDecodeError:
+            return False
 
     def get_parsed_file(self):
         raw = self.file.file.read()
@@ -101,26 +88,54 @@ class FileService:
 
             sha1_expected = metadata.get("SHA1", "").upper()
             content_start = nulls_pos + 2
-            content, content_end = self._find_content_end(raw, content_start, doc_end, sha1_expected)
+
+            content, content_end = self._find_content_end(
+                raw, content_start, doc_end, sha1_expected
+            )
             if content is None:
                 pos = doc_end
                 continue
 
-            # Detectar si el contenido es XML para poder luego mostrar resumen
+            filename = metadata.get("FILENAME", "")
+            content_type = metadata.get("CONTENTTYPE", "")
+
+            if is_forbidden_file(filename, content_type):
+                raise Exception(f"Forbidden file detected inside container:" 
+                                f"{filename}")
+
             is_xml = self._es_xml(content)
 
-            result = {
+            if self.is_text(content):
+                content_to_store = content.decode("utf-8", errors="ignore")
+                encoded = False
+            else:
+                content_to_store = base64.b64encode(content).decode("ascii")
+                encoded = True
+
+            full_result = {
                 "metadata": metadata,
-                "category": self.get_category(metadata.get("DOCUDOCTYPE", "")),
-                "content": base64.b64encode(content).decode("ascii"),
+                "category": get_category(metadata.get("DOCUDOCTYPE", "")),
                 "is_xml": is_xml,
+                "content": content_to_store,
+                "encoded_true": encoded
             }
 
-            # Si es XML, agregamos resumen simple para usar en frontend (opcional)
-            if is_xml:
-                result["xml_summary"] = self._resumen_xml(content)
+            guid = metadata.get("GUID")
 
-            results.append(result)
+            if guid:
+                full_result["guid"] = guid
+                collection.update_one(
+                    {"guid": guid},
+                    {"$set": full_result},
+                    upsert=True
+                )
+
+            results.append({
+                "guid": guid,
+                "filename": metadata.get("FILENAME"),
+                "category": get_category(metadata.get("DOCUDOCTYPE", "")),
+                "metadata": metadata
+            })
 
             pos = content_end + 2 if content_end + 2 <= length else doc_end
 
