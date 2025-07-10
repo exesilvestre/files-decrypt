@@ -1,0 +1,94 @@
+.container {
+  padding: 20px 40px;
+}
+
+.category {
+  margin-bottom: 40px;
+}
+
+.category h2 {
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+  color: #222;
+}
+
+.docTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  table-layout: fixed;
+}
+
+.docTable th,
+.docTable td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.docTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+
+.docTable th:nth-child(1),
+.docTable td:nth-child(1) {
+  width: 35%;
+}
+
+.docTable th:nth-child(2),
+.docTable td:nth-child(2) {
+  width: 25%;
+}
+
+.docTable th:nth-child(3),
+.docTable td:nth-child(3) {
+  width: 10%;
+}
+
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.actions button {
+  padding: 6px 14px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  flex: 1; 
+  min-width: 80px; 
+  white-space: nowrap;
+}
+
+.actions button:hover {
+  background-color: #0056b3;
+}
+
+.filename-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.docTable td:nth-child(2) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.docTable tr {
+  height: 50px;
+}
+
+.docTable td {
+  height: 50px;
+  box-sizing: border-box;
+}

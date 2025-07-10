@@ -1,0 +1,46 @@
+
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+}
+
+.dropzone {
+  border: 2px dashed #6c757d;
+  background-color: #f8f9fa;
+  padding: 60px;
+  width: 500px;
+  text-align: center;
+  border-radius: 12px;
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dragging {
+  background-color: #e2e6ea;
+}
+
+.input {
+  display: none;
+}
+
+.label {
+  font-size: 1.2rem;
+  color: #495057;
+  display: block;
+}
+
+.browse {
+  color: #007bff;
+  text-decoration: underline;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.fileName {
+  font-weight: bold;
+  color: #28a745;
+}
