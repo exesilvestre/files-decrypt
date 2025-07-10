@@ -1,12 +1,8 @@
-from utils.constants import FORBIDDEN_EXTENSIONS, FORBIDDEN_MIME_PREFIXES
+from utils.constants import FORBIDDEN_EXTENSIONS
 
 
-def is_forbidden_file(filename: str, content_type: str) -> bool:
-    ext = filename.lower()
-    for forbidden_ext in FORBIDDEN_EXTENSIONS:
-        if ext.endswith(forbidden_ext):
-            return True
-    for forbidden_mime in FORBIDDEN_MIME_PREFIXES:
-        if content_type.startswith(forbidden_mime):
-            return True
+def is_forbidden_filetype(file_ext: str) -> bool:
+    ext = file_ext.lower()
+    if ext in FORBIDDEN_EXTENSIONS:
+        return True
     return False
