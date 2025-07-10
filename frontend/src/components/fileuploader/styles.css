@@ -1,0 +1,80 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+}
+
+.dropzone {
+  width: 100%;
+  max-width: 300px;
+  height: 100px;
+  border: 2px dashed #aaa;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.dragging {
+  background-color: #e8f0fe;
+  border-color: #3b82f6;
+}
+
+.input {
+  display: none;
+}
+
+.label {
+  cursor: pointer;
+  color: #333;
+}
+
+.fileName {
+  font-weight: bold;
+}
+
+.browse {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.uploadButton {
+  background-color: #28a745; /* verde */
+  color: white;
+  padding: 10px 24px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.uploadButton:hover {
+  background-color: #218838;
+}
+
+.removeButton {
+  background-color: #dc3545; /* rojo */
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.removeButton:hover {
+  background-color: #c82333;
+}
