@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from middleware import LimitUploadSizeMiddleware
 from utils.constants import MAX_UPLOAD_SIZE
-from endpoints.upload import router as upload_router
-from endpoints.file import router as file_router
+from endpoints.upload_router import router as upload_router
+from endpoints.file_query_router import router as file_router
 
 app = FastAPI()
 
