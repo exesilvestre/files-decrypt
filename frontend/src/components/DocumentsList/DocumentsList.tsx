@@ -12,7 +12,6 @@ const DocumentList = ({ documents }: DocumentListsProps) => {
   const flatDocuments = documents.flat();
 
   const grouped = flatDocuments.reduce((acc, doc) => {
-      console.log('Processing document:', doc);
       const category = doc.category || 'Unknown';
       if (!acc[category]) {
           acc[category] = [];
@@ -41,7 +40,6 @@ const DocumentList = ({ documents }: DocumentListsProps) => {
       </div>
     );
   }
-  console.log('Grouped documents:', grouped);
   return (
     <div className="container">
       {Object.entries(grouped).map(([category, files]) => (

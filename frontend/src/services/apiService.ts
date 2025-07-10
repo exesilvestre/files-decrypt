@@ -20,7 +20,7 @@ export const uploadFile = async (file: File): Promise<DocumentAPIModel> => {
 };
 
 export const downloadFile = (guid: string): void => {
-  const url = `${API_BASE_URL}/file/${guid}`;
+  const url = `${API_BASE_URL}/downloadFile/${guid}`;
 
   fetch(url)
     .then(response => {
@@ -30,8 +30,18 @@ export const downloadFile = (guid: string): void => {
         else alert(`Download error: ${response.statusText}`);
         throw new Error('Download failed');
       }
-
-      window.open(url, '_blank');
+      const filename = response.headers.get('X-Filename') || `file-${guid}`;
+      return response.blob().then(blob => ({ blob, filename }));
+    })
+    .then(({ blob, filename }) => {
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(downloadUrl);
     })
     .catch(error => {
       console.error('Unexpected error while downloading the file', error);
