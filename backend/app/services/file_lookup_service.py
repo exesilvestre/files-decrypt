@@ -7,7 +7,7 @@ from db.mongo_client import collection
 import xmltodict
 
 
-def get_file_metadata_by_guid(guid: str) -> dict | None:
+def get_by_guid(guid: str) -> dict | None:
     try:
         return collection.find_one({"guid": guid})
     except PyMongoError:
@@ -15,7 +15,7 @@ def get_file_metadata_by_guid(guid: str) -> dict | None:
 
 
 def get_parsed_file_by_guid(guid: str) -> ParsedFileModel:
-    document = get_file_metadata_by_guid(guid)
+    document = get_by_guid(guid)
     if not document:
         raise HTTPException(status_code=404, detail="File not found")
 

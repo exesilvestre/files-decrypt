@@ -1,10 +1,11 @@
 import io
+import mimetypes
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
 from entities.parsed_file_model import ParsedFileModel
 from services.file_lookup_service import (
-    get_file_metadata_by_guid,
+    get_by_guid,
     get_parsed_file_by_guid,
 )
 
@@ -22,32 +23,29 @@ async def get_file_by_guid(guid: str):
 
 @router.get("/downloadFile/{guid}")
 async def download_file(guid: str):
-    document = get_file_metadata_by_guid(guid)
+    document = get_by_guid(guid)
     if not document:
         raise HTTPException(status_code=404, detail="File not found")
 
     metadata = document.get("metadata", {})
     content = document.get("content")
+
     filename = metadata.get("FILENAME", "unknown_file")
 
     if content is None:
         raise HTTPException(status_code=400, detail="No content found")
 
-    try:
-        file_bytes = content
-    except Exception as e:
-        raise HTTPException(
-            status_code=400, detail=f"Error processing content: {str(e)}"
-        )
+    file_like = io.BytesIO(content)
 
-    # Crear stream para descarga
-    file_like = io.BytesIO(file_bytes)
-
-    # Determinar content type
-    content_type = metadata.get("CONTENTTYPE", "application/octet-stream")
+    # Guess the content type based on the filename
+    content_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
 
     return StreamingResponse(
         file_like,
         media_type=content_type,
-        headers={"Content-Disposition": f"attachment; filename={filename}"},
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "X-Filename": filename,
+            "Access-Control-Expose-Headers": "X-Filename" 
+        },
     )
