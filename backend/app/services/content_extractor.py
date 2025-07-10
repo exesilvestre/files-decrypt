@@ -1,5 +1,5 @@
+import hashlib
 from typing import Optional, Tuple
-from utils.calculate_hash import sha1_bytes
 
 
 class ContentExtractor:
@@ -40,7 +40,7 @@ class ContentExtractor:
         content = raw[start:last_marker]
 
         # Validate content integrity by comparing SHA1 hashes
-        if sha1_bytes(content) == expected_sha1:
+        if expected_sha1 == hashlib.sha1(content).hexdigest().upper():
             return content, last_marker
         return None, None
 
