@@ -1,40 +1,38 @@
-## 📝 Descripción del PR
+## 📝 PR Description
 
-## Link al ticket de JIRA
+## Link to JIRA Ticket
 
-
-**¿Qué se hizo?**  
-_Describí brevemente los cambios realizados. Ej: Se corrigió un bug en el login que impedía avanzar si el usuario tenía caracteres especiales._
+**What was done?**  
+_Briefly describe the changes made. For example: A bug in the login that prevented users with special characters from proceeding was fixed._
 
 ---
 
-## 📁 Tipo de cambio
+## 📁 Type of Change
 
-Marcá con una `x` lo que aplique:
+Mark with an `x` what applies:
 
 - [ ] Bugfix 🐛
-- [ ] Nueva feature ✨
+- [ ] New feature ✨
 - [ ] Refactor 🔧
-- [ ] Documentación 📝
-- [ ] Otro: ___
+- [ ] Documentation 📝
+- [ ] Other: ___
 
 ---
 
-## ✅ Checklist de calidad de código
+## ✅ Code Quality Checklist
 
-- [ ] No hay comentarios innecesarios, código comentado o archivos sin uso.
-- [ ] No se agregaron librerías o dependencias que no se usan.
-- [ ] No hay clases, funciones o variables huérfanas (declaradas pero no utilizadas).
-- [ ] Se evitó el hardcodeo innecesario (se usan config o constantes donde aplica).
-- [ ] No hay strings mágicos (todo lo posible está en constantes).
-- [ ] El PR apunta al branch correcto (`develop`, `release`, `master`, cliente, etc).
-- [ ] No se introdujo ninguna vulnerabilidad de seguridad común (OWASP)
-
----
-
-## 📸 Capturas (solo si aplica)
-
-_Si es un cambio de frontend, dejá imágenes de cómo quedó visualmente._
+- [ ] There are no unnecessary comments, commented-out code, or unused files.
+- [ ] No unused libraries or dependencies were added.
+- [ ] There are no orphan classes, functions, or variables (declared but not used).
+- [ ] Hardcoding was avoided where unnecessary (configs or constants are used where applicable).
+- [ ] No magic strings (everything possible is stored in constants).
+- [ ] The PR targets the correct branch (`develop`, `release`, `master`, client-specific, etc).
+- [ ] No common security vulnerabilities were introduced (OWASP).
 
 ---
 
+## 📸 Screenshots (if applicable)
+
+_If this is a frontend change, include screenshots showing the visual result._
+
+---
