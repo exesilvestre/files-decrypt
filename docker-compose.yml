@@ -1,6 +1,9 @@
+version: '3.8'
+
 services:
   fastapi:
-    build: ./app
+    build:
+      context: ./backend/app
     container_name: fastapi_app
     ports:
       - "8000:8000"
@@ -8,6 +11,17 @@ services:
       - mongodb
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: react_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # útil para hot reload en Docker, opcional
+    depends_on:
+      - fastapi
 
   mongodb:
     image: mongo:6.0
