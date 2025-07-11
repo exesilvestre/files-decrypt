@@ -1,0 +1,12 @@
+Technical Decision Summary
+For file storage, I decided to use MongoDB as a quick and easy solution.
+
+I analyzed the container documents and their contents thoroughly until we identified clear patterns that allowed us to apply reverse engineering techniques to separate the individual files within the container.
+
+Determining where each embedded file ended was challenging. I studied recurring patterns and, leveraging the SHA-1 hashes provided in the metadata, we computed the SHA-1 on extracted content segments. When the hashes matched, we concluded that the content was complete and unmodified.
+
+Additionally, a small frontend was developed to make the three main API endpoints more accessible and user-friendly. This was done considering that the end users might not be familiar with interacting directly with APIs, so the UI helps visualize and manage the files easily.
+
+While exploring the files, I discovered recurring categories corresponding to common real estate forms used in the United States. Based on this, we assigned categories to recognized file types and listed them accordingly in the frontend.
+
+This categorization provides the end user (for example, a real estate analyst ) with a quick overview of the types of files submitted by their clients, making the workflow more intuitive and efficient.
