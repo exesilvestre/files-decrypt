@@ -1,6 +1,6 @@
+import { API_BASE_URL } from '../config';
 import { DocumentAPIModel } from '../pages/types';
-// Base URL de la API
-const API_BASE_URL = 'http://localhost:8000'
+
 
 export const uploadFile = async (file: File): Promise<DocumentAPIModel> => {
   const formData = new FormData();
